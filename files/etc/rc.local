@@ -1,0 +1,115 @@
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
+
+echo "=========================" > /dev/tty0
+echo "Configuring interfaces..." > /dev/tty0
+echo "=========================" > /dev/tty0
+
+sh -c "TERM=linux setterm --blank 0 --powerdown 0 --blink off --cursor off >/dev/tty0"
+
+sleep 5
+
+/etc/init.d/sysntpd disable
+#/etc/init.d/sysntpd stop
+sleep 20
+/etc/init.d/ntpd enable
+
+MAC=$(cat /sys/class/net/eth0/address)
+
+setup_ocb () {
+  iw reg set DE
+  ip link set wlan0 down
+  iw dev wlan0 set type ocb
+  ip link set wlan0 up
+  iw dev wlan0 ocb join 5900 10MHZ
+  ifconfig wlan0 $1 netmask 255.255.255.0
+  iw dev wlan0 set txpower fixed 3000
+  iw dev wlan0 set bitrates legacy-5 12
+}
+
+setup_leds_apu () {
+  echo "heartbeat" > /sys/class/leds/apu\:1/trigger
+
+  echo "netdev" > /sys/class/leds/apu\:2/trigger
+  echo "rx" > /sys/class/leds/apu\:2/mode
+  echo "$1" > /sys/class/leds/apu\:2/device_name
+
+  echo "netdev" > /sys/class/leds/apu\:3/trigger
+  echo "tx" > /sys/class/leds/apu\:3/mode
+  echo "$1" > /sys/class/leds/apu\:3/device_name
+}
+
+setup_leds_apu2 () {
+  rmmod leds-apu
+
+  echo "heartbeat" > /sys/class/leds/apu2\:green\:power/trigger
+
+  echo "netdev" > /sys/class/leds/apu2\:green\:led2/trigger
+  echo "rx" > /sys/class/leds/apu2\:green\:led2/mode
+  echo "$1" > /sys/class/leds/apu2\:green\:led2/device_name
+
+  echo "netdev" > /sys/class/leds/apu2\:green\:led3/trigger
+  echo "tx" > /sys/class/leds/apu2\:green\:led3/mode
+  echo "$1" > /sys/class/leds/apu2\:green\:led3/device_name
+}
+
+case "$MAC" in
+  "00:12:3f:13:4d:90")
+    echo "Setting values for gericom3"
+    echo "gericom3" > /proc/sys/kernel/hostname
+    ifconfig br-lan 10.0.197.103 netmask 255.255.255.0
+    ifconfig br-ext 10.0.103.103 netmask 255.255.255.0
+    # setup_ocb 192.168.99.103
+  ;;
+  "00:0d:b9:3f:7c:bc")
+    echo "Setting values for apu1"
+    echo "apu1" > /proc/sys/kernel/hostname
+    ifconfig br-lan 10.0.197.101 netmask 255.255.255.0
+    ifconfig br-ext 10.0.101.101 netmask 255.255.255.0
+    # setup_ocb 192.168.99.101
+    setup_leds_apu wlan0
+  ;;
+  "00:0d:b9:48:97:60")
+    echo "Setting values for apu4"
+    echo "apu4" > /proc/sys/kernel/hostname
+    ifconfig br-lan 10.0.197.104 netmask 255.255.255.0
+    ifconfig br-ext 10.0.104.104 netmask 255.255.255.0
+    # setup_ocb 192.168.99.104
+    setup_leds_apu2 wlan0
+  ;;
+  "00:0d:b9:48:51:ec")
+    echo "Setting values for apu5"
+    echo "apu5" > /proc/sys/kernel/hostname
+    ifconfig br-lan 10.0.197.105 netmask 255.255.255.0
+    ifconfig br-ext 10.0.105.105 netmask 255.255.255.0
+    # setup_ocb 192.168.99.105
+    setup_leds_apu2 wlan0
+  ;;
+  "00:0d:b9:48:4f:b8")
+    echo "Setting values for apu6"
+    echo "apu6" > /proc/sys/kernel/hostname
+    ifconfig br-lan 10.0.197.106 netmask 255.255.255.0
+    ifconfig br-ext 10.0.106.106 netmask 255.255.255.0
+    # setup_ocb 192.168.99.106
+    setup_leds_apu2 wlan0
+  ;;
+esac
+
+[ -f /etc/banner.sh ] && . /etc/banner.sh && echo "$BANNERTEXT" > /dev/tty0
+
+# setting up leds
+#echo "25" > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/GPIO25/direction
+#echo "1" > /sys/class/gpio/GPIO25/value
+
+#echo "27" > /sys/class/gpio/export
+#echo "out" > /sys/class/gpio/GPIO27/direction
+#echo "1" > /sys/class/gpio/GPIO27/value
+
+
+[ -f /etc/banner.sh ] && . /etc/banner.sh && lanradio --interface ${BASE_INTERFACE1} --echo 0 --baseport ${BASE_PORT1} &
+
+sleep 15
+/etc/init.d/ntpd start
+
+exit 0

@@ -1,0 +1,10 @@
+#! /bin/sh
+
+vim \
+	-c "inoremap <tab> <C-O>G<C-O>A<CR><C-R>=strftime('%s,%Y-%m-%d %H:%M:%S').','<CR><C-O>:w<CR>" \
+	-c "nnoremap <tab>           GA<CR><C-R>=strftime('%s,%Y-%m-%d %H:%M:%S').','<CR><C-O>:w<CR>" \
+	-c "set laststatus=2" \
+	-c "set statusline=%<%-0.40f%h%w%m%r\ (press\ TAB\ to\ save\ and\ append\ line\ with\ current\ time\ and\ date)%=%10(%l,%c%)" \
+	+ \
+	"$@"
+

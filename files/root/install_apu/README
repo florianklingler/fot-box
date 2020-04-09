@@ -1,0 +1,6 @@
+to install on APU
+ (0) boot over PXE
+ (1) ./install_apu.sh
+ (2) boot from installed SSD
+ (3) ./enable_mount_data_apu.sh
+ (4) reboot from installed SSD

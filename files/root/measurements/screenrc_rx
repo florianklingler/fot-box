@@ -1,0 +1,13 @@
+screen bash -c "/root/measurements/do_measurements.sh; bash"
+split -v
+focus right
+screen bash -c "/root/measurements/bmon.sh; bash"
+split
+focus down
+screen bash -c "vim /root/mylogfile; bash"
+focus left
+split
+focus down
+screen bash -c "bash"
+focus right
+focus bottom

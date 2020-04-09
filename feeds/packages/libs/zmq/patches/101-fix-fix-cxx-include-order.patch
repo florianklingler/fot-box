@@ -1,0 +1,39 @@
+Index: zeromq-4.1.4/src/raw_encoder.cpp
+===================================================================
+--- zeromq-4.1.4.orig/src/raw_encoder.cpp
++++ zeromq-4.1.4/src/raw_encoder.cpp
+@@ -27,7 +27,7 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+-#include <basic_definitions>
++//#include <basic_definitions>
+ #include <exception>
+ #include <cstddef>
+ #include <algorithm>
+Index: zeromq-4.1.4/src/v1_encoder.cpp
+===================================================================
+--- zeromq-4.1.4.orig/src/v1_encoder.cpp
++++ zeromq-4.1.4/src/v1_encoder.cpp
+@@ -27,7 +27,7 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+-#include <basic_definitions>
++//#include <basic_definitions>
+ #include <exception>
+ #include <cstddef>
+ #include <algorithm>
+Index: zeromq-4.1.4/src/v2_encoder.cpp
+===================================================================
+--- zeromq-4.1.4.orig/src/v2_encoder.cpp
++++ zeromq-4.1.4/src/v2_encoder.cpp
+@@ -27,7 +27,7 @@
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+-#include <basic_definitions>
++//#include <basic_definitions>
+ #include <exception>
+ #include <cstddef>
+ #include <algorithm>
